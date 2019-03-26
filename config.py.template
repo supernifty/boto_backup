@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+# copy this to config.py
+
+ACCESS_KEY='your access key'
+SECRET_KEY='your secret key'
+BUCKET_NAME='bucket to write to'
+SRC='source directory'
+DEST='target directory'
+ENDPOINT='https://objects.storage.unimelb.edu.au'
+
