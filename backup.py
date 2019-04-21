@@ -31,17 +31,19 @@ def main(create_bucket):
   if create_bucket:
     client.create_bucket(Bucket=config.BUCKET_NAME)
 
-  config=TransferConfig(
+  transfer_config=TransferConfig(
         multipart_threshold=15 * 1024 * 1024,
         max_concurrency=1
   )
 
-  transfer = S3Transfer(client, config)
+  transfer = S3Transfer(client, transfer_config)
 
   for root, dirs, files in os.walk(config.SRC):
     for file in files:
       src = os.path.join(root, file)
       dest = os.path.join(config.DEST, src)
+      if dest.startswith('/'):
+        dest = dest[1:]
       if os.path.isfile(src):
         logging.info('%s -> %s...', src, dest)
         try:
@@ -52,7 +54,7 @@ def main(create_bucket):
   logging.info('done')
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser(description='Assess MSI')
+  parser = argparse.ArgumentParser(description='Backup to S3')
   parser.add_argument('--create_bucket', action='store_true', help='create bucket')
   parser.add_argument('--verbose', action='store_true', help='more logging')
   args = parser.parse_args()
